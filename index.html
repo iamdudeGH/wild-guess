@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🦁 Wild Guess - Challenge the AI!</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container header-content">
+            <div class="logo">
+                <img src="Genlayerlogo.jpg" alt="GenLayer Logo" class="logo-image" onerror="this.style.display='none'">
+                <div class="logo-text">
+                    <h1>🦁 Wild Guess</h1>
+                    <p class="tagline">Can you stump the AI?</p>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="powered-by">
+                    <span>Powered by</span>
+                    <img src="Genlayerlogo.jpg" alt="GenLayer" class="powered-by-logo" onerror="this.style.display='none'; this.previousElementSibling.textContent='Powered by GenLayer'">
+                </div>
+                <button id="connectBtn" class="btn btn-primary">Connect Wallet</button>
+                <div id="walletInfo" class="wallet-info" style="display: none;">
+                    <span id="walletAddress"></span>
+                    <button id="disconnectBtn" class="btn btn-secondary btn-sm">Disconnect</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container main-content">
+        
+        <!-- Welcome Screen (Not Connected) -->
+        <div id="welcomeScreen" class="welcome-screen">
+            <div class="welcome-card">
+                <div class="hero-emoji">🦁🐯🐻🦅</div>
+                <h2>Welcome to Wild Guess!</h2>
+                <p class="welcome-text">
+                    Challenge AI to identify animal images. If AI guesses wrong, you win! 
+                    No tokens, no stakes - just pure fun competition!
+                </p>
+                
+                <div class="rules-box">
+                    <h3>🎮 How to Play:</h3>
+                    <ul class="rules-list">
+                        <li><strong>Upload</strong> an animal image (any animal!)</li>
+                        <li><strong>Tell us</strong> what the animal is</li>
+                        <li><strong>AI analyzes</strong> the image and makes a guess</li>
+                        <li><strong>You win</strong> if AI guesses wrong! 🎉</li>
+                        <li><strong>Track</strong> your score and climb the leaderboard</li>
+                    </ul>
+                </div>
+
+                <button id="welcomeConnectBtn" class="btn btn-large btn-primary">
+                    🔌 Connect Wallet to Play
+                </button>
+            </div>
+        </div>
+
+        <!-- Game Screen (Connected) -->
+        <div id="gameScreen" style="display: none;">
+            
+            <!-- Player Stats Card -->
+            <div class="stats-card">
+                <h3>📊 Your Stats</h3>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-value" id="statWins">0</div>
+                        <div class="stat-label">Times You Won</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="statTotal">0</div>
+                        <div class="stat-label">Total Challenges</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="statWinRate">0%</div>
+                        <div class="stat-label">Win Rate</div>
+                    </div>
+                    <div class="stat-item highlight">
+                        <div class="stat-value" id="statStreak">🔥 0</div>
+                        <div class="stat-label">Current Streak</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation Tabs -->
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="play">🎮 Play</button>
+                <button class="tab-btn" data-tab="recent">📜 Recent Games</button>
+                <button class="tab-btn" data-tab="leaderboard">🏆 Leaderboard</button>
+            </div>
+
+            <!-- Tab Content -->
+            <div class="tab-content">
+                
+                <!-- Play Tab -->
+                <div id="playTab" class="tab-pane active">
+                    <div class="play-container">
+                        <h2>🎯 Challenge the AI!</h2>
+                        <p>Upload an animal image and see if AI can identify it correctly</p>
+                        
+                        <form id="challengeForm" class="challenge-form">
+                            <!-- Image URL -->
+                            <div class="form-group">
+                                <label>📸 Animal Image URL</label>
+                                <input 
+                                    type="url" 
+                                    id="imageUrlInput" 
+                                    class="input-field" 
+                                    placeholder="https://cataas.com/cat"
+                                    required
+                                >
+                                <small>Paste a direct image URL. Try: https://cataas.com/cat (random cat) or any .jpg/.png link</small>
+                                <img id="previewImage" class="preview-image" style="display: none; margin-top: 15px; max-height: 200px;">
+                            </div>
+                            
+                            <!-- Animal Name -->
+                            <div class="form-group">
+                                <label for="animalNameInput">🦁 What is this animal?</label>
+                                <input 
+                                    type="text" 
+                                    id="animalNameInput" 
+                                    class="input-field" 
+                                    placeholder="e.g., Lion, Eagle, Penguin..."
+                                    required
+                                >
+                                <small>Be specific! This is what the AI needs to guess correctly.</small>
+                            </div>
+                            
+                            <!-- Submit Button -->
+                            <button type="submit" class="btn btn-large btn-primary">
+                                🚀 Challenge the AI!
+                            </button>
+                        </form>
+                        
+                        <!-- Result Display -->
+                        <div id="resultDisplay" class="result-display" style="display: none;">
+                            <div id="resultContent"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Games Tab -->
+                <div id="recentTab" class="tab-pane">
+                    <div class="section-header">
+                        <h2>📜 Recent Challenges</h2>
+                        <button id="refreshRecentBtn" class="btn btn-secondary">🔄 Refresh</button>
+                    </div>
+                    
+                    <div id="recentList" class="recent-list">
+                        <div class="loading">Loading recent games...</div>
+                    </div>
+                </div>
+
+                <!-- Leaderboard Tab -->
+                <div id="leaderboardTab" class="tab-pane">
+                    <div class="section-header">
+                        <h2>🏆 Top Players</h2>
+                        <button id="refreshLeaderboardBtn" class="btn btn-secondary">🔄 Refresh</button>
+                    </div>
+                    
+                    <div id="leaderboardList" class="leaderboard-list">
+                        <div class="loading">Loading leaderboard...</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="spinner"></div>
+        <p id="loadingText">Processing...</p>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>🦁 Wild Guess</h4>
+                    <p>Challenge AI to identify animal images. Can you stump the AI? Built on GenLayer's Intelligent Contract Network with Optimistic Democracy consensus.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="https://github.com/iamdudeGH/wild-guess" target="_blank">📂 GitHub Repository</a></li>
+                        <li><a href="https://genlayer.com" target="_blank">🌐 GenLayer Website</a></li>
+                        <li><a href="https://studio.genlayer.com" target="_blank">🛠️ GenLayer Studio</a></li>
+                        <li><a href="https://docs.genlayer.com" target="_blank">📚 Documentation</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Technology</h4>
+                    <p><strong>Built with:</strong> GenLayer Intelligent Contracts, Vite, JavaScript</p>
+                    <p><strong>Network:</strong> GenLayer Studio</p>
+                    <p><strong>Contract:</strong> <span class="contract-address">0x21Ab...9307</span></p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Wild Guess. Powered by <strong>GenLayer</strong> - The Intelligent Contract Network.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module" src="app.js"></script>
+</body>
+</html>

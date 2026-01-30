@@ -1,0 +1,26 @@
+{
+  "name": "wild-guess",
+  "version": "1.0.0",
+  "description": "🦁 Wild Guess - Can you stump the AI with animal images?",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "keywords": [
+    "genlayer",
+    "web3",
+    "ai",
+    "game",
+    "blockchain"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "vite": "^5.0.0"
+  },
+  "dependencies": {
+    "genlayer-js": "^0.18.3"
+  }
+}
