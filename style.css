@@ -685,15 +685,20 @@ body {
     background: #ef4444;
     color: white;
     border: none;
-    padding: 8px 16px;
-    border-radius: 6px;
+    padding: 10px 20px;
+    border-radius: 8px;
     cursor: pointer;
     font-weight: 600;
+    font-size: 14px;
     transition: all 0.2s ease;
+    margin-top: 10px;
+    position: relative;
+    z-index: 10;
 }
 
 .remove-file-btn:hover {
     background: #dc2626;
+    transform: scale(1.05);
 }
 
 /* ============================================

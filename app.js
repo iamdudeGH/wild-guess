@@ -72,6 +72,7 @@ function setupFileUpload() {
     const urlGroup = document.querySelector('.form-group');
     urlGroup.parentNode.insertBefore(dropZone, urlGroup);
     
+    // NOW select elements AFTER they're in the DOM
     const fileInput = document.getElementById('fileInput');
     const preview = dropZone.querySelector('.drop-zone-preview');
     const previewImg = document.getElementById('dropZonePreview');
@@ -115,14 +116,22 @@ function setupFileUpload() {
     });
     
     // Remove file
-    removeBtn.addEventListener('click', () => {
-        selectedFile = null;
-        fileInput.value = '';
-        preview.style.display = 'none';
-        content.style.display = 'block';
-        document.getElementById('imageUrlInput').value = '';
-        document.getElementById('imageUrlInput').disabled = false;
-    });
+    if (removeBtn) {
+        removeBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('Remove button clicked!');
+            selectedFile = null;
+            fileInput.value = '';
+            preview.style.display = 'none';
+            content.style.display = 'block';
+            document.getElementById('imageUrlInput').value = '';
+            document.getElementById('imageUrlInput').disabled = false;
+            showToast('Image removed', 'info');
+        });
+    } else {
+        console.error('Remove button not found!');
+    }
     
     function handleFileSelect(file) {
         if (!file || !file.type) {
